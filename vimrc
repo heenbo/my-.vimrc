@@ -47,7 +47,7 @@ endif
 "set hidden		" Hide buffers when they are abandoned
 "set mouse=a		" Enable mouse usage (all modes)
 
-set nu
+"set nu
 "set ruler 
 set showcmd
 "新建 c 文件自动加头文件__
@@ -58,16 +58,33 @@ func SetTitle()
 		call append(line("."),   " *   > File Name: ".expand("%")) 
 		call append(line(".")+1, " *   > Author: heenbo") 
 		call append(line(".")+2, " *   > Mail: 379667345@qq.com ") 
-		call append(line(".")+3, " *   > Created Time: ".strftime("%c")) 
-		call append(line(".")+4, " ************************************************************************/") 
-		call append(line(".")+5, "")
+		call append(line(".")+3, " *   > Created Time:  ".strftime("%c")) 
+		call append(line(".")+4, " *   > Modified Time: ".strftime("%c")) 
+		call append(line(".")+5, " ************************************************************************/") 
+		call append(line(".")+6, "")
 	endif
 
 	if &filetype == 'c'
-		call append(line(".")+6, "#include <stdio.h>")
-		call append(line(".")+7, "")
+		call append(line(".")+7, "#include <stdio.h>")
+		call append(line(".")+8, "")
 	endif
 	autocmd BufNewFile * normal G
+endfunc
+
+"修改 c 自动更新最后的修改时间
+autocmd BufWrite *.c exec ":call SetModifiedTime()"
+func SetModifiedTime()
+	if &filetype == 'c'
+		let n=1
+		while n < 7
+			let line = getline(n)
+			if line =~ '^\s\*\s\s\s>\sModified\sTime:'
+				call setline(n, " *   > Modified Time: ".strftime("%c")) 
+				return
+			endif
+			let n = n + 1
+		endwhile
+	endif
 endfunc
 
 "光标移动到buffer的顶部和底部时保持3行距离""
@@ -93,7 +110,7 @@ set autoindent
 set cindent
 " Tab键的宽度
 set tabstop=8
-" 统一缩进为4
+" 统一缩进为8
 set softtabstop=8
 set shiftwidth=8
 " 侦测文件类型
@@ -103,11 +120,11 @@ filetype plugin on
 " 为特定文件类型载入相关缩进文件
 filetype indent on
 " 可以在buffer的任何地方使用鼠标（类似office中在工作区双击鼠标定位）
-set mouse=a
-set selection=exclusive
-set selectmode=mouse,key
-set matchtime=1
-" 光标移动到buffer的顶部和底部时保持3行距离
+"set mouse=a
+"set selection=exclusive
+"set selectmode=mouse,key
+"set matchtime=1
+"光标移动到buffer的顶部和底部时保持3行距离
 set scrolloff=3
 " 为C程序提供自动缩进
 set smartindent
