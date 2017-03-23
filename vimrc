@@ -47,12 +47,16 @@ endif
 "set hidden		" Hide buffers when they are abandoned
 "set mouse=a		" Enable mouse usage (all modes)
 
+"heenbo
 "set nu
 "set ruler 
 set showcmd
 "新建 c 文件自动加头文件__
 autocmd BufNewFile *.c exec ":call SetTitle()"
 func SetTitle()
+
+endfunc
+func SetTitle_bak()
 	if &filetype == 'c'
 		call setline(1, "/*************************************************************************") 
 		call append(line("."),   " *   > File Name: ".expand("%")) 
@@ -74,6 +78,9 @@ endfunc
 "修改 c 自动更新最后的修改时间
 autocmd BufWrite *.c exec ":call SetModifiedTime()"
 func SetModifiedTime()
+
+endfunc
+func SetModifiedTime_bak()
 	if &filetype == 'c'
 		let n=1
 		while n < 7
@@ -108,11 +115,14 @@ filetype plugin on
 "自动缩进"
 set autoindent
 set cindent
+"修改c文件和头文件的tab键为空格
+autocmd BufNewFile,BufRead *.c,*.h,*.cpp set cindent smartindent expandtab ts=4 shiftwidth=4 showmatch
+
 " Tab键的宽度
-set tabstop=8
+""set tabstop=8
 " 统一缩进为8
-set softtabstop=8
-set shiftwidth=8
+""set softtabstop=8
+""set shiftwidth=8
 " 侦测文件类型
 filetype on
 " 载入文件类型插件
